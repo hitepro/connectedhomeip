@@ -203,7 +203,8 @@ void emAfInitializeMessageSentCallbackArray(void)
     }
 }
 
-static EmberStatus send(chip::ExchangeContext & exchangeContext, EmberApsFrame * apsFrame, uint16_t messageLength, uint8_t * message, bool broadcast, EmberNodeId alias, uint8_t sequence, EmberAfMessageSentFunction callback)
+static EmberStatus send(chip::ExchangeContext & exchangeContext, EmberApsFrame * apsFrame, uint16_t messageLength,
+                        uint8_t * message, bool broadcast, EmberNodeId alias, uint8_t sequence, EmberAfMessageSentFunction callback)
 {
     EmberStatus status;
     uint8_t index;
@@ -267,7 +268,10 @@ static EmberStatus send(chip::ExchangeContext & exchangeContext, EmberApsFrame *
 
     {
         EmberAfMessageStruct messageStruct = {
-            callback, apsFrame, message, messageLength,
+            callback,
+            apsFrame,
+            message,
+            messageLength,
         };
         // Called prior to fragmentation in case the mesasge does not go out over the
         // Zigbee radio, and instead goes to some other transport that does not require
@@ -333,7 +337,8 @@ static EmberStatus send(chip::ExchangeContext & exchangeContext, EmberApsFrame *
     return status;
 }
 
-EmberStatus emberAfSendUnicastWithCallback(DataModelContext & context, EmberApsFrame * apsFrame, uint16_t messageLength, uint8_t * message, EmberAfMessageSentFunction callback)
+EmberStatus emberAfSendUnicastWithCallback(DataModelContext & context, EmberApsFrame * apsFrame, uint16_t messageLength,
+                                           uint8_t * message, EmberAfMessageSentFunction callback)
 {
     return send(context.GetExchangeContext(), apsFrame, messageLength, message,
                 false, // broadcast?
@@ -448,7 +453,8 @@ static void printMessage(EmberApsFrame * apsFrame, uint16_t messageLength, uint8
     emberAfAppPrintln("");
 }
 
-void emAfMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame, EmberStatus status, uint16_t messageLength, uint8_t * messageContents, uint8_t messageTag)
+void emAfMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame, EmberStatus status, uint16_t messageLength,
+                            uint8_t * messageContents, uint8_t messageTag)
 {
     EmberAfMessageSentFunction callback;
     if (status != EMBER_SUCCESS)
@@ -464,7 +470,8 @@ void emAfMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame
 
     if (messageContents != NULL && messageContents[0] & ZCL_CLUSTER_SPECIFIC_COMMAND)
     {
-        emberAfClusterMessageSentWithMfgCodeCallback(context, apsFrame, messageLength, messageContents, status,
+        emberAfClusterMessageSentWithMfgCodeCallback(
+            context, apsFrame, messageLength, messageContents, status,
             // If the manufacturer specific flag is set
             // get read it as next part of message
             // else use null code.
@@ -486,8 +493,8 @@ void emAfMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame
 }
 
 #ifdef EMBER_AF_PLUGIN_FRAGMENTATION
-void emAfFragmentationMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame,
-                                         uint8_t * buffer, uint16_t bufLen, EmberStatus status, uint8_t messageTag)
+void emAfFragmentationMessageSentHandler(DataModelContext & context, EmberApsFrame * apsFrame, uint8_t * buffer, uint16_t bufLen,
+                                         EmberStatus status, uint8_t messageTag)
 {
     // the fragmented message is no longer in process
     emberAfDebugPrintln("%pend.", "Fragmentation:");

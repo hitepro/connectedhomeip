@@ -26,7 +26,8 @@ chip::ExchangeDelegate * GetDataModelHandler()
     return &gDataModelHandler;
 }
 
-void DataModelHandler::OnMessageReceived(chip::ExchangeContext * ec, const chip::PacketHeader & packetHeader, uint32_t protocolId, uint8_t msgType, chip::System::PacketBuffer * payload)
+void DataModelHandler::OnMessageReceived(chip::ExchangeContext * ec, const chip::PacketHeader & packetHeader, uint32_t protocolId,
+                                         uint8_t msgType, chip::System::PacketBuffer * payload)
 {
     // currently we support only one transaction
     static DataModelTransaction sTransaction;
@@ -38,7 +39,8 @@ void DataModelHandler::OnMessageReceived(chip::ExchangeContext * ec, const chip:
 void DataModelHandler::OnResponseTimeout(chip::ExchangeContext * ec) {}
 void DataModelHandler::OnExchangeClosing(chip::ExchangeContext * ec) {}
 
-void DataModelTransaction::OnMessageReceived(chip::ExchangeContext * ec, const chip::PacketHeader & packetHeader, uint32_t protocolId, uint8_t msgType, chip::System::PacketBuffer * buffer)
+void DataModelTransaction::OnMessageReceived(chip::ExchangeContext * ec, const chip::PacketHeader & packetHeader,
+                                             uint32_t protocolId, uint8_t msgType, chip::System::PacketBuffer * buffer)
 {
     auto contextLock = dmContext.Scoped(this, ec);
     EmberApsFrame frame;
