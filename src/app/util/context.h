@@ -135,4 +135,3 @@ private:
     DataModelTransaction * mTransaction = nullptr;
     chip::ExchangeContext * mExchangeContext = nullptr;
 };
-
